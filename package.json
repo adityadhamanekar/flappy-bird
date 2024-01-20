@@ -1,0 +1,20 @@
+{
+  "name": "flappybird",
+  "version": "1.0.0",
+  "description": "flappy bird game with javascript",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html && ncp sounds dist/sounds && ncp images dist/images --dist-dir ./dist "
+  },
+  "author": "Aditya Dhamanekar",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.11.0"
+  },
+  "dependencies": {
+    "ncp": "^2.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
