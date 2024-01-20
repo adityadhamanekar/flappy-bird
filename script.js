@@ -9,7 +9,7 @@ const ground = document.querySelector(".ground");
 const bird = document.querySelector(".bird");
 let birdY = parseInt(bird.getBoundingClientRect().top) / 2;
 let pipeX = -100;
-let gravity = 5;
+let gravity = 2;
 let pipeList = [];
 const dummyPipeList = [];
 const pipeGap = 200;
@@ -30,7 +30,10 @@ function gameLoop() {
   displayScore();
 }
 
-gameLoop();
+setTimeout(() => {
+  gameLoop();
+}, 2000);
+
 // flying bird
 function flyingBird() {
   birdY += gravity;
@@ -71,9 +74,11 @@ function creatingPipe() {
   dummyPipeList.push({ upperPipe, downPipe });
 }
 
-setInterval(() => {
-  creatingPipe();
-}, 1300);
+setTimeout(() => {
+  setInterval(() => {
+    creatingPipe();
+  }, 1300);
+}, 2000);
 
 // displaying pipe
 function displayPipe() {
