@@ -20,7 +20,11 @@ let pipeSpeed = 3;
 let birdIndex = 1;
 let score = 0;
 let pipeInterval;
+
 const scoreCard = document.querySelector(".score");
+scoreCard.style.display = "none";
+const scoreCard2 = document.querySelector(".score2");
+scoreCard2.style.display = "none";
 let gameOver = false;
 let gameStart = false;
 bird.style.display = "none";
@@ -76,6 +80,7 @@ gameScreen.addEventListener("click", () => {
     wingSound.play();
     message.style.display = "none";
     bird.style.display = "inline";
+    scoreCard.style.display = "inline-block";
   }
 });
 
@@ -86,6 +91,7 @@ window.addEventListener("keydown", e => {
     wingSound.play();
     message.style.display = "none";
     bird.style.display = "inline";
+    scoreCard.style.display = "inline";
   }
 });
 
@@ -180,10 +186,22 @@ function displayScore() {
     if (parseInt(birdRect.left, 10) > parseInt(upperPipeRect.right, 10)) {
       dummyPipeList.splice(i, 1);
       score++;
-      if (localStorage.getItem("highestScore") < score) highestScore = score;
-      localStorage.setItem("highestScore", highestScore);
+      if (score < 10) {
+        scoreCard.style.backgroundImage = `url(./images/${score}.png)`;
+      } else {
+        scoreCard2.style.display = "inline-block";
+        scoreCard.style.backgroundImage = `url(./images/${
+          String(score)[0]
+        }.png)`;
+        scoreCard2.style.backgroundImage = `url(./images/${
+          String(score)[1]
+        }.png)`;
+      }
+      if (localStorage.getItem("highestScore") < score)
+        localStorage.setItem("highestScore", highestScore);
+
       pointSound.play();
-      scoreCard.textContent = `SCORE : ${score}`;
+
       return;
     }
   });
@@ -194,7 +212,8 @@ function displayGameOver() {
   scoreCard.style.display = "none";
   messageScore.textContent = `SCORE : ${score}`;
   messageBest.textContent = `BEST : ${localStorage.getItem("highestScore")}`;
-  restart.addEventListener("click", () => {
-    location.reload();
-  });
 }
+
+restart.addEventListener("click", () => {
+  location.reload();
+});
