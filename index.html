@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="images/bird1.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="style.css">
     <title>Flappy Bird</title>
     <script defer src="script.js"></script>
@@ -16,8 +18,19 @@
             SCORE: 0
         </div>
 
+        <div class="message"></div>
+
         <div class="bird"></div>
         <div class="ground"></div>
+        <div class="gameOver">
+            <img src="./images/gameover.png" alt="gameOver" class="gameOver__message">
+            <div class="scoreCard">
+                <p class="message_score">SCORE : 0</p>
+                <P class="message_best">BEST : 0 </P>
+            </div>
+            <i class="uil uil-play restart"></i>
+
+        </div>
         <p class="copyright">
             &copy; Aditya Dhamanekar.
         </p>

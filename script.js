@@ -5,6 +5,7 @@ const pointSound = new Audio("./sounds/point.wav");
 let hitSound = new Audio("./sounds/hit.wav");
 const dieSounds = new Audio("./sounds/die.wav");
 const gameScreen = document.querySelector(".game");
+const message = document.querySelector(".message");
 const ground = document.querySelector(".ground");
 const bird = document.querySelector(".bird");
 let birdY = parseInt(bird.getBoundingClientRect().top) / 2;
@@ -12,6 +13,8 @@ let pipeX = -100;
 let gravity = 2;
 let pipeList = [];
 const dummyPipeList = [];
+const randomNum = Math.floor(Math.random() * 3);
+const birdColors = ["bird", "blue", "yellow"];
 const pipeGap = 200;
 let pipeSpeed = 3;
 let birdIndex = 1;
@@ -20,6 +23,18 @@ let pipeInterval;
 const scoreCard = document.querySelector(".score");
 let gameOver = false;
 let gameStart = false;
+bird.style.display = "none";
+let highestScore = 0;
+const gameOverMessage = document.querySelector(".gameOver");
+gameOverMessage.style.display = "none";
+const restart = document.querySelector(".restart");
+const messageScore = document.querySelector(".message_score");
+const messageBest = document.querySelector(".message_best");
+
+localStorage.setItem("score", score);
+if (localStorage.getItem("highestScore"))
+  localStorage.setItem("highestScore", localStorage.getItem("highestScore"));
+else localStorage.setItem("highestScore", highestScore);
 
 // gamelooping
 
@@ -49,8 +64,8 @@ function flyingBird() {
     bird.style.top = 38.5 + "rem";
     gameOver = true;
     if (hitSound) hitSound.play();
-
     hitSound = null;
+    displayGameOver();
   }
 }
 
@@ -59,6 +74,8 @@ gameScreen.addEventListener("click", () => {
     gravity = -3.8;
     gameStart = true;
     wingSound.play();
+    message.style.display = "none";
+    bird.style.display = "inline";
   }
 });
 
@@ -67,6 +84,8 @@ window.addEventListener("keydown", e => {
     gravity = -3.8;
     gameStart = true;
     wingSound.play();
+    message.style.display = "none";
+    bird.style.display = "inline";
   }
 });
 
@@ -85,9 +104,18 @@ function creatingPipe() {
   dummyPipeList.push({ upperPipe, downPipe });
 }
 
+// creating pipe
 setInterval(() => {
   if (gameStart && !gameOver) creatingPipe();
 }, 1300);
+
+// animating bird
+
+setInterval(() => {
+  bird.style.backgroundImage = `url(./images/${birdColors[randomNum]}${birdIndex}.png)`;
+  if (!gameOver) birdIndex++;
+  if (birdIndex > 3) birdIndex = 1;
+}, 100);
 
 // displaying pipe
 function displayPipe() {
@@ -129,6 +157,7 @@ function collision() {
     ) {
       hitSound.play();
       gameOver = true;
+      displayGameOver();
     }
     if (
       birdRect.right > downPipeRect.left &&
@@ -138,15 +167,10 @@ function collision() {
     ) {
       hitSound.play();
       gameOver = true;
+      displayGameOver();
     }
   });
 }
-
-setInterval(() => {
-  bird.style.backgroundImage = `url(images/bird${birdIndex}.png)`;
-  birdIndex++;
-  if (birdIndex > 3) birdIndex = 1;
-}, 100);
 
 function displayScore() {
   dummyPipeList.forEach(({ upperPipe, downPipe }, i) => {
@@ -156,9 +180,21 @@ function displayScore() {
     if (parseInt(birdRect.left, 10) > parseInt(upperPipeRect.right, 10)) {
       dummyPipeList.splice(i, 1);
       score++;
+      if (localStorage.getItem("highestScore") < score) highestScore = score;
+      localStorage.setItem("highestScore", highestScore);
       pointSound.play();
       scoreCard.textContent = `SCORE : ${score}`;
       return;
     }
+  });
+}
+
+function displayGameOver() {
+  gameOverMessage.style.display = "flex";
+  scoreCard.style.display = "none";
+  messageScore.textContent = `SCORE : ${score}`;
+  messageBest.textContent = `BEST : ${localStorage.getItem("highestScore")}`;
+  restart.addEventListener("click", () => {
+    location.reload();
   });
 }
