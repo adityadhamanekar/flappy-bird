@@ -12,7 +12,7 @@ html {
   font-size: 62.5%;
 }
 
-body {
+.container {
   font-weight: 400;
   line-height: 1.7;
   font-family: poppins, sans-serif;
@@ -33,6 +33,7 @@ body {
 .game {
   width: 28.8rem;
   height: 51.2rem;
+
   background-image: url(./images/background.png);
   position: relative;
   border: 2px solid white;

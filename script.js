@@ -2,7 +2,7 @@
 
 const wingSound = new Audio("./sounds/wing.wav");
 const pointSound = new Audio("./sounds/point.wav");
-const hitSound = new Audio("./sounds/hit.wav");
+let hitSound = new Audio("./sounds/hit.wav");
 const dieSounds = new Audio("./sounds/die.wav");
 const gameScreen = document.querySelector(".game");
 const ground = document.querySelector(".ground");
@@ -16,23 +16,28 @@ const pipeGap = 200;
 let pipeSpeed = 3;
 let birdIndex = 1;
 let score = 0;
+let pipeInterval;
 const scoreCard = document.querySelector(".score");
+let gameOver = false;
+let gameStart = false;
 
-// gameloop
+// gamelooping
 
 function gameLoop() {
+  if (gameStart) {
+    flyingBird();
+    gravity += 0.2;
+  }
   window.requestAnimationFrame(gameLoop);
-  flyingBird();
-  gravity += 0.2;
-  displayPipe();
-  movePipe();
-  collision();
-  displayScore();
+  if (!gameOver && gameStart) {
+    displayPipe();
+    movePipe();
+    collision();
+    displayScore();
+  }
 }
 
-setTimeout(() => {
-  gameLoop();
-}, 2000);
+gameLoop();
 
 // flying bird
 function flyingBird() {
@@ -41,20 +46,26 @@ function flyingBird() {
   const birdRect = bird.getBoundingClientRect();
   const groundRect = ground.getBoundingClientRect();
   if (birdRect.top + birdRect.height >= groundRect.top) {
-    dieSounds.play();
-
     bird.style.top = 38.5 + "rem";
+    gameOver = true;
+    if (hitSound) hitSound.play();
+
+    hitSound = null;
   }
 }
 
 gameScreen.addEventListener("click", () => {
-  gravity = -3.8;
-  wingSound.play();
+  if (!gameOver) {
+    gravity = -3.8;
+    gameStart = true;
+    wingSound.play();
+  }
 });
 
 window.addEventListener("keydown", e => {
-  if (e.key == " ") {
+  if (e.key == " " && !gameOver) {
     gravity = -3.8;
+    gameStart = true;
     wingSound.play();
   }
 });
@@ -74,11 +85,9 @@ function creatingPipe() {
   dummyPipeList.push({ upperPipe, downPipe });
 }
 
-setTimeout(() => {
-  setInterval(() => {
-    creatingPipe();
-  }, 1300);
-}, 2000);
+setInterval(() => {
+  if (gameStart && !gameOver) creatingPipe();
+}, 1300);
 
 // displaying pipe
 function displayPipe() {
@@ -119,6 +128,7 @@ function collision() {
       birdRect.top < upperPipeRect.bottom
     ) {
       hitSound.play();
+      gameOver = true;
     }
     if (
       birdRect.right > downPipeRect.left &&
@@ -127,6 +137,7 @@ function collision() {
       birdRect.top < downPipeRect.bottom
     ) {
       hitSound.play();
+      gameOver = true;
     }
   });
 }
