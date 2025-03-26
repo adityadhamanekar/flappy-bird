@@ -148,10 +148,6 @@ html {
   display: inline-block;
   background-size: contain;
   background-repeat: no-repeat;
-  /* position: absolute;
-  top: 4rem;
-  left: 50%;
-  transform: translateX(-50%); */
 }
 
 .score2 {
