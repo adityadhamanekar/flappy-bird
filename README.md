@@ -3,7 +3,7 @@ A simple Flappy Bird clone built using **HTML, CSS, and JavaScript**.
 Fly the bird through obstacles and achieve the highest score!  
 
 ## 🎮 Live Demo  
-[Play Flappy Bird](https://flappy-birds-js.netlify.app/) *(Replace with your actual link)*  
+[Play Flappy Bird](https://flappy-birds-js.netlify.app/) 
 
 ## 📸 Screenshot  
 ![Flappy Bird Screenshot](images/flappy.png) 
